@@ -1,91 +1,109 @@
 # Smart City Mobility Analytics — Antananarivo, Madagascar
 
-An interactive urban mobility analytics platform built with Python, Elasticsearch, and Streamlit. The project simulates urban trips across 17 neighborhoods of Antananarivo, Madagascar, and provides interactive dashboards to explore mobility patterns.
+An interactive urban mobility analytics platform built with **Python, Elasticsearch, and Streamlit**. This project explores simulated mobility patterns across 17 neighborhoods of Antananarivo, Madagascar, through data processing, Elasticsearch aggregations, and interactive visualizations.
 
-> **Data note:** The 10,000 trips are synthetically generated for academic and analytical purposes. They are not real traffic measurements or official mobility records.
+> **Data note:** This project uses 10,000 synthetically generated trips for academic and analytical purposes. The results do not represent real traffic measurements or official mobility records.
 
-## Project Overview
+## Application Overview
 
-The application explores simulated mobility patterns by:
-- Hour of day
-- Departure and arrival neighborhoods
-- Vehicle type
-- Weather conditions
-- Congestion level
-- Trip distance, duration, and average speed
+The application provides an interactive interface to explore urban mobility patterns, compare vehicle usage, and analyze the influence of weather conditions on simulated trips.
 
-## Architecture
+![Application Home](images/home.png)
 
-1. **Data Generation — Python**  
-   `data/generate_data.py` generates 10,000 synthetic trip documents and exports a CSV copy (`mobility_tana.csv`).
+## Dashboard
 
-2. **Indexing — Elasticsearch**  
-   `elastic/index.py` creates the `smart_city_mobility` index and defines field mappings, including geographic point fields.
+The dashboard presents predefined analyses of the generated mobility dataset.
 
-3. **Ingestion — Elasticsearch Bulk API**  
-   The generated documents are inserted into Elasticsearch by `data/generate_data.py`.
+### Hourly Traffic Analysis
 
-4. **Queries and Aggregations — Python + Elasticsearch**  
-   `agregations/queries.py` executes filtered searches and aggregations.
+The dataset shows two main traffic peaks: **7:00 AM (1,132 trips)** and **5:00 PM (1,147 trips)**.
 
-5. **Interactive Interface — Streamlit**  
-   `app/main.py` provides the home page, while the pages in `app/pages/` provide the dashboard and data exploration interface. Pandas prepares query results and Plotly renders charts.
+![Hourly Traffic Analysis](images/dashboard/dashboard-hourly-traffic.png)
 
-## Main Features
+### Weather Impact on Trip Duration
 
-- Traffic volume by hour.
-- Most frequently used departure and arrival neighborhoods.
-- Comparison of trip duration by weather condition.
-- Vehicle statistics: trip counts, average distance, duration, and speed.
-- Interactive filters by vehicle, weather, and time range.
+Average trip duration is higher under rainy conditions (26 minutes) than under sunny (19.6 minutes) or cloudy conditions (19 minutes).
+
+![Weather Impact](images/dashboard/dashboard-weather-impact.png)
+
+## Interactive Data Exploration
+
+The exploration interface allows users to investigate specific mobility patterns using filters such as vehicle type, weather conditions, and time range.
+
+### Taxi-be Hourly Traffic Analysis
+
+With the selected filters (Taxi-be, rainy weather, 5:00 AM–10:00 PM), the analysis identifies two activity peaks: 7:00 AM (29 trips) and 5:00 PM (37 trips).
+
+![Taxi-be Hourly Traffic](images/exploration/exploration-taxi-be.png)
+
+### Vehicle Distance and Duration Comparison
+
+The comparison highlights differences in average trip distance and duration across vehicle types. Under the selected analysis conditions, Taxi-be trips have the highest average distance (5.01 km) and duration (42.2 minutes).
+
+![Vehicle Comparison](images/exploration/exploration-vehicle-comparison.png)
+
+## Key Features
+
+- Hourly traffic pattern analysis.
+- Mobility analysis by neighborhood and vehicle type.
+- Weather impact analysis on trip duration.
+- Comparison of average trip distance and duration.
+- Interactive filtering by vehicle type, weather, and time range.
+- Elasticsearch queries and aggregations for data analysis.
 
 ## Technology Stack
 
-- Python
-- Elasticsearch 8.18
-- Streamlit
-- Pandas
-- Plotly
-- Docker Compose
+- **Python** — data generation and processing
+- **Elasticsearch 8.18** — data indexing and aggregations
+- **Streamlit** — interactive web application
+- **Pandas** — data manipulation
+- **Plotly** — data visualization
+- **Docker Compose** — Elasticsearch deployment
 
 ## Project Structure
 
 ```text
 smart-city-mobility-analytics/
+├── images/
+│   ├── home.png
+│   ├── dashboard/
+│   │   ├── dashboard-traffic.png
+│   │   └── dashboard-weather.png
+│   └── exploration/
+│       ├── exploration-taxi-be.png
+│       └── exploration-vehicle-comparison.png
 ├── agregations/
-│   └── queries.py
 ├── app/
 │   ├── main.py
 │   └── pages/
-│       ├── dashboard.py
-│       └── exploration.py
 ├── data/
 │   └── generate_data.py
 ├── elastic/
 │   └── index.py
+├── docs/
+│   └── analysis.md
 ├── mobility_tana.csv
 ├── docker-compose.yml
 ├── requirements.txt
-├── .gitignore
 └── README.md
 ```
 
 ## Run Locally
 
-### 1. Prerequisites
+### Prerequisites
 
 - Python 3.10 or newer
 - Docker Desktop with Docker Compose
-- Git (optional, for cloning the repository)
+- Git
 
-### 2. Clone the repository
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/malala1105/smart-city-mobility-analytics.git
 cd smart-city-mobility-analytics
 ```
 
-### 3. Create and activate a virtual environment
+### 2. Create and activate a virtual environment
 
 **Windows PowerShell:**
 
@@ -101,55 +119,58 @@ python3 -m venv .venv
 source .venv/bin/activate
 ```
 
-### 4. Install dependencies
+### 3. Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 5. Start Elasticsearch
+### 4. Start Elasticsearch
 
 ```bash
 docker compose up -d
 ```
 
-Wait until Elasticsearch is ready at `http://localhost:9200`.
+Wait until Elasticsearch is available at `http://localhost:9200`.
 
-### 6. Create the Elasticsearch index
+### 5. Create the Elasticsearch index
 
 ```bash
 python elastic/index.py
 ```
 
-> **Warning:** The index script deletes an existing `smart_city_mobility` index before recreating it. Running it again removes the currently indexed documents.
+> **Warning:** This script deletes and recreates the existing `smart_city_mobility` index. Running it again will remove the documents currently stored in that index.
 
-### 7. Generate and index the synthetic trips
+### 6. Generate and index the dataset
 
 ```bash
 python data/generate_data.py
 ```
 
-This generates and indexes 10,000 trips and exports `mobility_tana.csv` in the current working directory.
+This generates 10,000 synthetic trips, indexes them in Elasticsearch, and exports the CSV dataset.
 
-### 8. Launch the Streamlit application
+### 7. Launch the application
 
 ```bash
 streamlit run app/main.py
 ```
 
-Streamlit will display a local URL in the terminal (usually `http://localhost:8501`).
+Open the local URL displayed in the terminal, usually `http://localhost:8501`.
 
-## Notes and Limitations
+## Limitations
 
-- The dataset is synthetic; patterns reflect the assumptions encoded in the generation script.
-- Distances are estimated from neighborhood coordinates using a simplified road-distance factor, not measured GPS routes.
-- Weather, congestion, vehicle distributions, and trip purposes are simulated.
-- The application requires a running local Elasticsearch instance populated with the generated index.
+- All trips and mobility indicators are synthetically generated.
+- Distances are estimated using neighborhood coordinates and a simplified road-distance factor, not actual GPS routes.
+- Weather conditions, congestion levels, and vehicle distributions are simulated.
+- The application requires a running Elasticsearch instance populated with the generated dataset.
 
 ## Author
 
-**Iangotiana Noro Malala Andrianoelisoa**
+**Iangotiana Noro Malala Andrianoelisoa**  
+AI & Big Data Student | Aspiring Data Analyst & Data Scientist
+
+*Academic portfolio project focused on urban mobility analytics in Antananarivo, Madagascar.*
 
 ---
 
-*Developed as an academic portfolio project focused on urban mobility analytics in Antananarivo, Madagascar.*
+For more detailed visualizations, numerical results, and analytical interpretations, see the [Full Analysis Report](docs/analysis.md).
