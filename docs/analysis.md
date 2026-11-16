@@ -22,7 +22,7 @@ The Dashboard presents predefined analyses that provide an overview of the simul
 
 ### 2.1. Hourly Traffic Analysis
 
-![Hourly Traffic Analysis](../images/dashboard/dashboard-traffic.png)
+![Hourly Traffic Analysis](../images/dashboard/dashboard-hourly-traffic.png)
 
 **Objective:** Identify the busiest hours of the day by examining the distribution of trips over time.
 
@@ -46,7 +46,7 @@ The evening peak is slightly higher than the morning peak, suggesting greater si
 
 ### 2.2. Weather Impact on Trip Duration
 
-![Weather Impact on Trip Duration](../images/dashboard/dashboard-weather.png)
+![Weather Impact on Trip Duration](../images/dashboard/dashboard-weather-impact.png)
 
 **Objective:** Compare average trip duration under different weather conditions.
 
