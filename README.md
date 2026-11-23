@@ -2,8 +2,6 @@
 
 An interactive urban mobility analytics platform built with **Python, Elasticsearch, and Streamlit**. This project explores simulated mobility patterns across 17 neighborhoods of Antananarivo, Madagascar, through data processing, Elasticsearch aggregations, and interactive visualizations.
 
-> **Data note:** This project uses 10,000 synthetically generated trips for academic and analytical purposes. The results do not represent real traffic measurements or official mobility records.
-
 ## Application Overview
 
 The application provides an interactive interface to explore urban mobility patterns, compare vehicle usage, and analyze the influence of weather conditions on simulated trips.
